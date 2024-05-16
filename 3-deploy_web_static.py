@@ -1,16 +1,14 @@
 #!/usr/bin/python3
-import os.path
+"""A module that deploys archives on web servers"""
+from fabric.api import local, env, put, run
 from datetime import datetime
-from fabric.api import env
-from fabric.api import local
-from fabric.api import put
-from fabric.api import run
+import os
 
-env.hosts = ['100.26.155.12', '100.25.211.32']
+env.hosts = ['3.90.70.66', '100.26.231.45']
 
 
 def do_pack():
-    """Create a tar gzipped archive of the directory web_static."""
+    """A function that generates .tgz archive from contents of web_static"""
     dt = datetime.utcnow()
     file = "versions/web_static_{}{}{}{}{}{}.tgz".format(dt.year,
                                                          dt.month,
@@ -27,14 +25,7 @@ def do_pack():
 
 
 def do_deploy(archive_path):
-    """Distributes an archive to a web server.
-
-    Args:
-        archive_path (str): The path of the archive to distribute.
-    Returns:
-        If the file doesn't exist at archive_path or an error occurs - False.
-        Otherwise - True.
-    """
+    """Function to distribute an archive to web servers"""
     if os.path.isfile(archive_path) is False:
         return False
     file = archive_path.split("/")[-1]
@@ -68,7 +59,7 @@ def do_deploy(archive_path):
 
 
 def deploy():
-    """Create and distribute an archive to a web server."""
+    """Function that deploys archives"""
     file = do_pack()
     if file is None:
         return False
